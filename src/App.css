@@ -1,0 +1,22 @@
+/* App.css */
+
+:root {
+  /* Light theme colors */
+  --color-bg: #ffffff;
+  --color-text: #0f172a;
+  --color-accent-orange: #f97316;
+  --color-accent-blue: #2563eb;
+}
+
+.dark {
+  /* Dark theme colors */
+  --color-bg: #0f172a; /* slate-900 */
+  --color-text: #f1f5f9; /* slate-100 */
+}
+
+/* Apply globally */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
