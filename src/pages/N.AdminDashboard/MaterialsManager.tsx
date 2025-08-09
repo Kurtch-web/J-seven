@@ -10,13 +10,14 @@ type Material = {
   supplier: string;
   category: string;
   image?: string;
+  stockDate: string; // YYYY-MM-DD format
 };
 
 export default function MaterialsManager() {
   const [materials, setMaterials] = useState<Material[]>([
-    { id: 1, name: "Plywood", spec: "3/4 x 4x8", price: "₱980", supplier: "WoodWorks", category: "Wood" },
-    { id: 2, name: "Cement", spec: "40kg", price: "₱260", supplier: "CemCo", category: "Construction" },
-    { id: 3, name: "Rebar", spec: "#10", price: "₱400", supplier: "SteelSupplies", category: "Metal" },
+    { id: 1, name: "Plywood", spec: "3/4 x 4x8", price: "₱980", supplier: "WoodWorks", category: "Wood", stockDate: "2025-08-05" },
+    { id: 2, name: "Cement", spec: "40kg", price: "₱260", supplier: "CemCo", category: "Construction", stockDate: "2025-08-06" },
+    { id: 3, name: "Rebar", spec: "#10", price: "₱400", supplier: "SteelSupplies", category: "Metal", stockDate: "2025-08-07" },
   ]);
 
   const [form, setForm] = useState<Material>({
@@ -27,6 +28,7 @@ export default function MaterialsManager() {
     supplier: "",
     category: "",
     image: "",
+    stockDate: new Date().toISOString().split("T")[0],
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -65,6 +67,11 @@ export default function MaterialsManager() {
   };
 
   const handleSave = () => {
+    if (!form.name || !form.spec || !form.price || !form.supplier || !form.category || !form.stockDate) {
+      alert("Please fill in all required fields, including stock date.");
+      return;
+    }
+
     if (isEditing) {
       setMaterials(materials.map((m) => (m.id === form.id ? form : m)));
     } else {
@@ -81,7 +88,16 @@ export default function MaterialsManager() {
   };
 
   const resetForm = () => {
-    setForm({ id: 0, name: "", spec: "", price: "", supplier: "", category: "", image: "" });
+    setForm({
+      id: 0,
+      name: "",
+      spec: "",
+      price: "",
+      supplier: "",
+      category: "",
+      image: "",
+      stockDate: new Date().toISOString().split("T")[0],
+    });
     setIsEditing(false);
   };
 
@@ -103,10 +119,19 @@ export default function MaterialsManager() {
     )
     .sort((a, b) => {
       if (!sortKey) return 0;
+      if (sortKey === "stockDate") {
+        return sortOrder === "asc"
+          ? new Date(a.stockDate).getTime() - new Date(b.stockDate).getTime()
+          : new Date(b.stockDate).getTime() - new Date(a.stockDate).getTime();
+      }
       const valA = a[sortKey]?.toString().toLowerCase() || "";
       const valB = b[sortKey]?.toString().toLowerCase() || "";
       return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     });
+
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
 
   return (
     <section className="font-manrope">
@@ -138,6 +163,7 @@ export default function MaterialsManager() {
                 { key: "price", label: "Price" },
                 { key: "supplier", label: "Supplier" },
                 { key: "category", label: "Category" },
+                { key: "stockDate", label: "Stock Date" },
               ].map(({ key, label }) => (
                 <th key={key} className="p-3 whitespace-nowrap">
                   <div className="flex items-center gap-1 cursor-pointer" onClick={() => handleSort(key as keyof Material)}>
@@ -157,6 +183,7 @@ export default function MaterialsManager() {
                 <td className="p-3">{mat.price}</td>
                 <td className="p-3">{mat.supplier}</td>
                 <td className="p-3">{mat.category}</td>
+                <td className="p-3">{formatDate(mat.stockDate)}</td>
                 <td className="p-3 space-x-2">
                   <Button
                     size="sm"
@@ -183,51 +210,23 @@ export default function MaterialsManager() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.1)] backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 w-full max-w-lg">
             <h3 className="text-white font-bold text-md mb-4">
               {isEditing ? "Edit Material" : "Add New Material"}
             </h3>
             <div className="space-y-4">
-              <input
-                name="name"
-                placeholder="Material Name"
-                value={form.name}
-                onChange={handleInputChange}
-                className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-              />
-              <input
-                name="spec"
-                placeholder="Specification"
-                value={form.spec}
-                onChange={handleInputChange}
-                className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-              />
-              <input
-                name="price"
-                placeholder="Price"
-                value={form.price}
-                onChange={handleInputChange}
-                className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-              />
-              <input
-                name="supplier"
-                placeholder="Supplier"
-                value={form.supplier}
-                onChange={handleInputChange}
-                className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-              />
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleInputChange}
-                className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-              >
+              <input name="name" placeholder="Material Name" value={form.name} onChange={handleInputChange} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white" />
+              <input name="spec" placeholder="Specification" value={form.spec} onChange={handleInputChange} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white" />
+              <input name="price" placeholder="Price" value={form.price} onChange={handleInputChange} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white" />
+              <input name="supplier" placeholder="Supplier" value={form.supplier} onChange={handleInputChange} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white" />
+              <select name="category" value={form.category} onChange={handleInputChange} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white">
                 <option value="">Select Category</option>
                 {categories.map((cat) => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
               </select>
+              <input type="date" name="stockDate" value={form.stockDate} onChange={handleInputChange} className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white" />
               {/* Image Upload */}
               <div className="border-2 border-dashed border-slate-600 rounded-lg p-4 text-center">
                 {form.image ? (
@@ -235,26 +234,13 @@ export default function MaterialsManager() {
                 ) : (
                   <Upload className="mx-auto mb-2 text-slate-400" size={32} />
                 )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="block w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 
-                             file:rounded file:border-0 file:text-sm file:font-semibold
-                             file:bg-blue-600 file:text-white hover:file:bg-blue-500"
-                />
+                <input type="file" accept="image/*" onChange={handleImageUpload} className="block w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500" />
               </div>
               <div className="flex gap-3">
                 <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700 text-white">
                   {isEditing ? "Update Material" : "Add Material"}
                 </Button>
-                <Button
-                  onClick={() => {
-                    setShowModal(false);
-                    resetForm();
-                  }}
-                  className="bg-slate-600 hover:bg-slate-700 text-white"
-                >
+                <Button onClick={() => { setShowModal(false); resetForm(); }} className="bg-slate-600 hover:bg-slate-700 text-white">
                   Cancel
                 </Button>
               </div>
