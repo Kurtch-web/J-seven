@@ -7,10 +7,10 @@ import QuickOverview from "./QuickOverview";
 import SearchMaterials from "./SearchMaterials";
 import RecentNotifications from "./RecentNotifications";
 import ActivityTimeline from "./ActivityTimeline";
-import MyStore from "./MyStore";
-import MaterialsManager from "./MaterialsManager";
-import QuotationTool from "./Quotation";
-import AccountSettings from "./AccountSettings";
+import MyStore from "../MyStore";
+import MaterialsManager from "../MaterialsManager";
+import QuotationTool from "../Quotation";
+import AccountSettings from "../AccountSettings";
 
 export default function DashboardView() {
   const navigate = useNavigate();

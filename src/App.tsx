@@ -10,7 +10,7 @@ import { FAQ } from "./components/landing.sections/faq";
 import { Footer } from "./components/landing.nav.foot/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import AdminDashboard from "./pages/N.AdminDashboard/DashboardView";
+import AdminDashboard from "./pages/N.AdminDashboard/BusinessDashB/DashboardView";
 import SuperAdminDashboard from "./pages/S.AdminDashboard/SuperAdminDashboard";
 
 function App() {
