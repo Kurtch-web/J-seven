@@ -9,7 +9,7 @@ import RecentNotifications from "./RecentNotifications";
 import ActivityTimeline from "./ActivityTimeline";
 import MyStore from "./MyStore";
 import MaterialsManager from "./MaterialsManager";
-import QuotationTool from "./QuotationTool";
+import QuotationTool from "./Quotation";
 import AccountSettings from "./AccountSettings";
 
 export default function DashboardView() {
