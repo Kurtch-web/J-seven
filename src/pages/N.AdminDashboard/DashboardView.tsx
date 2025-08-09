@@ -24,8 +24,11 @@ export default function DashboardView() {
   const sectionTitles: Record<string, string> = {
     dashboard: "Business Dashboard",
     store: "My Store",
-    materials: "Manage Materials",
     quotation: "Quotation Tool",
+    invoices: "Invoices",
+    clients: "Client Management",
+    suppliers: "Supplier Management",
+    materials: "Materials Management",
     settings: "Account Settings",
   };
 
@@ -124,11 +127,20 @@ export default function DashboardView() {
             <button onClick={() => setActiveSection("store")} className="hover:text-orange-400 block w-full text-left">
               My Store
             </button>
-            <button onClick={() => setActiveSection("materials")} className="hover:text-orange-400 block w-full text-left">
-              Materials
-            </button>
             <button onClick={() => setActiveSection("quotation")} className="hover:text-orange-400 block w-full text-left">
               Quotation Tool
+            </button>
+            <button onClick={() => setActiveSection("invoices")} className="hover:text-orange-400 block w-full text-left">
+              Invoices
+            </button>
+            <button onClick={() => setActiveSection("clients")} className="hover:text-orange-400 block w-full text-left">
+              Client Management
+            </button>
+            <button onClick={() => setActiveSection("suppliers")} className="hover:text-orange-400 block w-full text-left">
+              Supplier Management
+            </button>
+            <button onClick={() => setActiveSection("materials")} className="hover:text-orange-400 block w-full text-left">
+              Materials Management
             </button>
             <button onClick={() => setActiveSection("settings")} className="hover:text-orange-400 block w-full text-left">
               Account Settings
