@@ -380,12 +380,16 @@ export default function ClientManagement() {
                 />
               </div>
 
-              <input
-                placeholder="VAT Number (Tax Information)"
-                value={form.vatNumber || ""}
-                onChange={(e) => setForm((p) => ({ ...p, vatNumber: e.target.value }))}
-                className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-              />
+              {/* Tax Information */}
+              <div>
+               <h4 className="text-sm text-slate-200 mb-2">Tax Information</h4>
+               <input
+                 placeholder="VAT Number"
+                 value={form.vatNumber || ""}
+                 onChange={(e) => setForm((p) => ({ ...p, vatNumber: e.target.value }))}
+                 className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
+                />
+             </div>
 
               {/* Main Address */}
               <div>
