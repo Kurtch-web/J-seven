@@ -11,6 +11,8 @@ import MyStore from "../MyStore";
 import MaterialsManager from "../MaterialsManager";
 import QuotationTool from "../Quotation";
 import AccountSettings from "../AccountSettings";
+import ClientManagement from "../ClientManagement";
+import SupplierManagement from "../SupplierManagement";
 
 export default function DashboardView() {
   const navigate = useNavigate();
@@ -174,6 +176,8 @@ export default function DashboardView() {
           {activeSection === "store" && <MyStore onBack={() => setActiveSection("dashboard")} />}
           {activeSection === "materials" && <MaterialsManager />}
           {activeSection === "quotation" && <QuotationTool />}
+          {activeSection === "clients" && <ClientManagement />}
+          {activeSection === "suppliers" && <SupplierManagement />}
           {activeSection === "settings" && <AccountSettings />}
         </main>
       </div>
