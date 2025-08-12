@@ -12,7 +12,7 @@ import MaterialsManager from "../MaterialsManager";
 import QuotationTool from "../Quotation";
 import AccountSettings from "../AccountSettings";
 import ClientManagement from "../ClientManagement";
-import SupplierManagement from "../SupplierManagement/SupplierManagement";
+import SupplierManagement from "../Suppliers/SupplierManagement";
 
 export default function DashboardView() {
   const navigate = useNavigate();
