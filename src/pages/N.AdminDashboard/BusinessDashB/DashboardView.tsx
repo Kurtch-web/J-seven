@@ -11,7 +11,7 @@ import MyStore from "../MyStore";
 import MaterialsManager from "../MaterialsManager";
 import QuotationTool from "../Quotation";
 import AccountSettings from "../AccountSettings";
-import ClientManagement from "../ClientManagement";
+import ClientManagement from "../Clients/ClientManagement";
 import SupplierManagement from "../Suppliers/SupplierManagement";
 
 export default function DashboardView() {
