@@ -1,5 +1,8 @@
-import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Search } from "lucide-react";
 
 const mockMaterials = [
   "Cement - 25kg",
@@ -17,30 +20,41 @@ export default function SearchMaterials() {
   );
 
   return (
-    <section>
-      <h2 className="text-xl font-semibold mb-4 text-white">Search Materials</h2>
+    <Card className="bg-slate-800 border border-slate-700">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-white text-lg font-semibold">
+          Search Materials
+        </CardTitle>
+        <Search className="h-5 w-5 text-slate-400" />
+      </CardHeader>
 
-      <Input
-        placeholder="Search by name..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="mb-4 bg-slate-800 border border-slate-600 text-white"
-      />
+      <CardContent>
+        <Input
+          placeholder="Search by name..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="mb-4 bg-slate-900 border-slate-600 text-white placeholder:text-slate-500"
+        />
 
-      <ul className="space-y-2">
-        {filtered.map((item, idx) => (
-          <li
-            key={idx}
-            className="bg-slate-800 border border-slate-700 px-4 py-3 rounded-lg text-white hover:border-orange-500 transition"
-          >
-            {item}
-          </li>
-        ))}
+        <ScrollArea className="h-[200px]">
+          <ul className="space-y-2">
+            {filtered.map((item, idx) => (
+              <li
+                key={idx}
+                className="bg-slate-900 border border-slate-700 px-4 py-3 rounded-lg text-white hover:border-orange-500 transition"
+              >
+                {item}
+              </li>
+            ))}
 
-        {filtered.length === 0 && (
-          <li className="text-sm text-slate-400 italic">No results found.</li>
-        )}
-      </ul>
-    </section>
+            {filtered.length === 0 && (
+              <li className="text-sm text-slate-400 italic">
+                No results found.
+              </li>
+            )}
+          </ul>
+        </ScrollArea>
+      </CardContent>
+    </Card>
   );
 }
