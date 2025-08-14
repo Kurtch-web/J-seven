@@ -7,6 +7,8 @@ import QuickOverview from "./QuickOverview";
 import SearchMaterials from "./SearchMaterials";
 import RecentNotifications from "./RecentNotifications";
 import ActivityTimeline from "./ActivityTimeline";
+import QuickActions from "./QuickActions"; // ⬅ New import
+
 import MyStore from "../MyStore";
 import MaterialsManager from "../MaterialsManager";
 import QuotationTool from "../Quotation";
@@ -18,7 +20,7 @@ export default function DashboardView() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(3); // Initial unread notifications
+  const [unreadCount, setUnreadCount] = useState(3);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
   const handleLogout = () => navigate("/");
@@ -37,7 +39,7 @@ export default function DashboardView() {
   const handleNotificationsClick = () => {
     setNotificationsOpen((prev) => !prev);
     if (!notificationsOpen) {
-      setUnreadCount(0); // Mark as read when opened
+      setUnreadCount(0);
     }
   };
 
@@ -72,7 +74,6 @@ export default function DashboardView() {
               )}
             </button>
 
-            {/* Notifications Dropdown */}
             {notificationsOpen && (
               <div className="absolute right-0 mt-2 w-64 bg-slate-800 border border-slate-700 rounded-lg shadow-lg p-4 z-20">
                 <h4 className="font-semibold mb-2">Notifications</h4>
@@ -123,30 +124,15 @@ export default function DashboardView() {
 
           {/* Navigation */}
           <nav className="space-y-8 text-sm font-bold">
-            <button onClick={() => setActiveSection("dashboard")} className="hover:text-orange-400 block w-full text-left">
-              Business Dashboard
-            </button>
-            <button onClick={() => setActiveSection("store")} className="hover:text-orange-400 block w-full text-left">
-              My Store
-            </button>
-            <button onClick={() => setActiveSection("quotation")} className="hover:text-orange-400 block w-full text-left">
-              Quotation Tool
-            </button>
-            <button onClick={() => setActiveSection("invoices")} className="hover:text-orange-400 block w-full text-left">
-              Invoices
-            </button>
-            <button onClick={() => setActiveSection("clients")} className="hover:text-orange-400 block w-full text-left">
-              Client Management
-            </button>
-            <button onClick={() => setActiveSection("suppliers")} className="hover:text-orange-400 block w-full text-left">
-              Supplier Management
-            </button>
-            <button onClick={() => setActiveSection("materials")} className="hover:text-orange-400 block w-full text-left">
-              Materials Management
-            </button>
-            <button onClick={() => setActiveSection("settings")} className="hover:text-orange-400 block w-full text-left">
-              Account Settings
-            </button>
+            {Object.entries(sectionTitles).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setActiveSection(key)}
+                className="hover:text-orange-400 block w-full text-left"
+              >
+                {label}
+              </button>
+            ))}
           </nav>
         </aside>
 
@@ -155,6 +141,9 @@ export default function DashboardView() {
           {activeSection === "dashboard" && (
             <>
               <QuickOverview />
+
+              {/* Quick Actions */}
+              <QuickActions onSelect={(section) => setActiveSection(section)} />
 
               {/* Notifications + Timeline */}
               <section>
