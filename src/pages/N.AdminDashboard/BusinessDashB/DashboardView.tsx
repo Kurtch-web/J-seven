@@ -9,7 +9,7 @@ import RecentNotifications from "./RecentNotifications";
 import ActivityTimeline from "./ActivityTimeline";
 import QuickActions from "./QuickActions"; // ⬅ New import
 
-import MyStore from "../MyStore";
+import MyStore from "../MyStore/MyStore";
 import MaterialsManager from "../MaterialsManager";
 import QuotationTool from "../Quotation";
 import AccountSettings from "../AccountSettings";
