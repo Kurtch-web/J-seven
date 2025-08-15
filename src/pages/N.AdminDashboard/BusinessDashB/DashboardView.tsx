@@ -10,7 +10,7 @@ import ActivityTimeline from "./ActivityTimeline";
 import QuickActions from "./QuickActions"; // ⬅ New import
 
 import MyStore from "../MyStore/MyStore";
-import MaterialsManager from "../MaterialsManager";
+import MaterialsManager from "../MaterialsManagement/MaterialsManager";
 import QuotationTool from "../Quotation";
 import AccountSettings from "../AccountSettings";
 import ClientManagement from "../Clients/ClientManagement";
