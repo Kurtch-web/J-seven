@@ -1,5 +1,6 @@
 // pages/N.AdminDashboard/Clients/ClientTable.tsx
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Pencil, Trash2 } from "lucide-react";
 import type { Client, ClientDisplayKeys } from "./types";
 
@@ -9,10 +10,12 @@ type Props = {
   columns: { key: ClientDisplayKeys; label: string }[];
   sortKey: ClientDisplayKeys | null;
   sortOrder: "asc" | "desc";
-  onSortToggle: (key: ClientDisplayKeys) => void; // renamed for consistency
+  onSortToggle: (key: ClientDisplayKeys) => void;
   getClientField: (c: Client, key: ClientDisplayKeys) => string;
   onEdit: (client: Client) => void;
   onDelete: (id: number) => void;
+  selectedIds: number[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default function ClientTable({
@@ -25,12 +28,41 @@ export default function ClientTable({
   getClientField,
   onEdit,
   onDelete,
+  selectedIds,
+  setSelectedIds,
 }: Props) {
+  const toggleSelectAll = () => {
+    if (selectedIds.length === clients.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(clients.map((c) => c.id));
+    }
+  };
+
+  const toggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="overflow-x-auto border border-slate-700 rounded">
       <table className="w-full text-sm text-white">
         <thead className="bg-slate-700">
           <tr>
+            {/* Master checkbox */}
+             <th className="p-3 w-10">
+               <Checkbox
+                 checked={
+                  selectedIds.length === clients.length
+                  ? true
+                 : selectedIds.length === 0
+                 ? false
+               : "indeterminate"
+                 }
+               onCheckedChange={toggleSelectAll}
+                  />
+               </th>
             <th className="p-3">Logo</th>
             {columns.map((col) =>
               visibleColumns.includes(col.key) ? (
@@ -59,6 +91,13 @@ export default function ClientTable({
               key={client.id}
               className="border-t border-slate-600 hover:bg-slate-800"
             >
+              {/* Row checkbox */}
+              <td className="p-3 w-10">
+                <Checkbox
+                  checked={selectedIds.includes(client.id)}
+                  onCheckedChange={() => toggleSelect(client.id)}
+                />
+              </td>
               <td className="p-3">
                 {client.logo ? (
                   <img

@@ -7,7 +7,43 @@ import ClientTable from "./ClientTable";
 import type { Client, ClientDisplayKeys } from "./types";
 
 export default function ClientManagement() {
-  const [clients, setClients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<Client[]>([
+    {
+      id: 1,
+      logo: "",
+      businessName: "Acme Construction",
+      email: "contact@acmecon.com",
+      phone: "0917-123-4567",
+      vatNumber: "VAT-12345",
+      address: {
+        street: "123 Main St",
+        city: "Quezon City",
+        state: "Metro Manila",
+        postalCode: "1100",
+      },
+      shippingAddresses: [],
+      attachments: [],
+      dateAdded: "08/12/2025",
+    },
+    {
+      id: 2,
+      logo: "",
+      businessName: "BuildWell Supplies",
+      email: "sales@buildwell.ph",
+      phone: "0998-765-4321",
+      vatNumber: "VAT-67890",
+      address: {
+        street: "456 Industrial Rd",
+        city: "Makati",
+        state: "Metro Manila",
+        postalCode: "1200",
+      },
+      shippingAddresses: [],
+      attachments: [],
+      dateAdded: "08/14/2025",
+    },
+  ]);
+
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<Client | null>(null);
@@ -40,6 +76,8 @@ export default function ClientManagement() {
 
   const [sortKey, setSortKey] = useState<ClientDisplayKeys | null>("dateAdded");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const toggleColumn = (key: ClientDisplayKeys) => {
     setVisibleColumns((prev) =>
@@ -59,7 +97,14 @@ export default function ClientManagement() {
     return c[key] ?? "";
   };
 
-  const sortedClients = [...clients].sort((a, b) => {
+  const filteredClients = clients.filter((c) =>
+    Object.values(c)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  const sortedClients = [...filteredClients].sort((a, b) => {
     if (!sortKey) return 0;
     const va = (getClientField(a, sortKey) || "").toString().toLowerCase();
     const vb = (getClientField(b, sortKey) || "").toString().toLowerCase();
@@ -92,19 +137,41 @@ export default function ClientManagement() {
     setClients((prev) => prev.filter((c) => c.id !== id));
   };
 
+  const handleBulkDelete = () => {
+    if (!confirm("Delete selected clients?")) return;
+    setClients((prev) => prev.filter((c) => !selectedIds.includes(c.id)));
+    setSelectedIds([]);
+  };
+
   return (
     <section className="font-manrope">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-white">Client Management</h2>
 
         <div className="flex items-center gap-3">
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search clients..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="px-3 py-2 rounded bg-slate-800 border border-slate-600 text-white"
+          />
+
+          {/* Bulk Delete */}
+          {selectedIds.length > 0 && (
+            <Button variant="destructive" className="bg-red-700" onClick={handleBulkDelete}>
+              Delete Selected
+            </Button>
+          )}
+
+          {/* Column Toggle */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen((v) => !v)}
               className="inline-flex items-center gap-2 px-3 py-1.5 border rounded bg-slate-700 text-white hover:bg-slate-600"
             >
-              Columns{" "}
-              <ChevronDown size={14} className={dropdownOpen ? "transform rotate-180" : ""} />
+              Columns <ChevronDown size={14} className={dropdownOpen ? "transform rotate-180" : ""} />
             </button>
             <div
               className={`origin-top-right absolute right-0 mt-2 w-52 bg-slate-800 border border-slate-700 rounded shadow-lg z-30 transform transition-all duration-180 ease-out ${
@@ -132,6 +199,7 @@ export default function ClientManagement() {
             </div>
           </div>
 
+          {/* Add Button */}
           <Button
             onClick={openAddModal}
             className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2"
@@ -141,30 +209,29 @@ export default function ClientManagement() {
         </div>
       </div>
 
+      {/* Table */}
       <ClientTable
         clients={sortedClients}
         visibleColumns={visibleColumns}
         columns={columns}
         sortKey={sortKey}
         sortOrder={sortOrder}
-        onSortToggle={onSortToggle} // updated name
+        onSortToggle={onSortToggle}
         getClientField={getClientField}
         onEdit={openEditModal}
         onDelete={handleDelete}
+        selectedIds={selectedIds}
+        setSelectedIds={setSelectedIds}
       />
 
-      {showModal && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.12)] backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <ClientForm
-              initialData={editData}
-              isEditing={isEditing}
-              onSave={handleSave}
-              onCancel={() => setShowModal(false)}
-            />
-          </div>
-        </div>
-      )}
+      {/* Form */}
+      <ClientForm
+        open={showModal}
+        onOpenChange={setShowModal}
+        initialData={editData}
+        isEditing={isEditing}
+        onSave={handleSave}
+      />
     </section>
   );
 }
