@@ -95,7 +95,7 @@ export default function MaterialsManager() {
             className="px-3 py-2 rounded bg-slate-800 border border-slate-600 text-white"
           />
           {selectedIds.length > 0 && (
-            <Button variant="destructive" onClick={handleBulkDelete}>
+            <Button variant="destructive" className="bg-red-700" onClick={handleBulkDelete}>
               Delete Selected
             </Button>
           )}
