@@ -8,20 +8,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
 import signupImage from "@/assets/images/signupImage.jpg";
 
 export default function Signup() {
   const [form, setForm] = useState({
-    fullName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
+    idFile: null as File | null,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setForm({ ...form, idFile: file });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -62,30 +71,42 @@ export default function Signup() {
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Home
           </Link>
-          <br></br>
-          <br></br>
+          <br />
+          <br />
           <div>
-            <p className="text-sm text-gray-400 font-bold font-manrope">START FOR FREE</p>
             <h2 className="text-4xl font-bold">
               Create your{" "}
               <span className="text-orange-500 font-playfair">J</span>
               <span className="text-blue-600 font-playfair">Seven</span> account
             </h2>
           </div>
-          <br></br>
+          <br />
 
           {/* Form */}
           <form className="space-y-4 font-manrope" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-sm font-semibold mb-1">Full Name</label>
-              <Input
-                name="fullName"
-                type="text"
-                required
-                value={form.fullName}
-                onChange={handleChange}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold mb-1">First Name</label>
+                <Input
+                  name="firstName"
+                  type="text"
+                  required
+                  value={form.firstName}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-1">Last Name</label>
+                <Input
+                  name="lastName"
+                  type="text"
+                  required
+                  value={form.lastName}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
+
             <div>
               <label className="block text-sm font-semibold mb-1">Email</label>
               <Input
@@ -107,9 +128,7 @@ export default function Signup() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Confirm Password
-              </label>
+              <label className="block text-sm font-semibold mb-1">Confirm Password</label>
               <Input
                 name="confirmPassword"
                 type="password"
@@ -118,30 +137,60 @@ export default function Signup() {
                 onChange={handleChange}
               />
             </div>
-            <br></br>
+
+            {/* Government/Employee ID Upload */}
+            <div>
+              <label className="block text-sm font-semibold mb-1">
+                Upload Government ID or Employee ID
+              </label>
+              <Input
+                type="file"
+                accept="image/*,.pdf"
+                onChange={handleFileChange}
+                className="bg-slate-800 border-slate-700"
+              />
+              {form.idFile && (
+                <p className="text-xs text-gray-400 mt-1">Selected: {form.idFile.name}</p>
+              )}
+            </div>
+
+            <br />
+
             {/* Terms Agreement */}
             <div className="flex items-start gap-2 text-sm text-gray-300">
-              <input
-                type="checkbox"
-                required
-                className="mt-1 accent-orange-500"
-              />
+              <input type="checkbox" required className="mt-1 accent-orange-500" />
               <span>
                 I agree to JSEVEN's{" "}
                 <Dialog>
                   <DialogTrigger className="text-blue-400 hover:underline">
                     Terms of Service
                   </DialogTrigger>
-                  <DialogContent className="bg-white rounded-lg shadow-lg">
+                  <DialogContent className="bg-white rounded-lg shadow-lg max-w-lg">
                     <DialogHeader>
                       <DialogTitle>Terms of Service</DialogTitle>
                     </DialogHeader>
-                    <div className="text-sm text-gray-700">
+                    <div className="text-sm text-gray-700 space-y-3 max-h-[50vh] overflow-y-auto">
                       <p>
-                        These are sample Terms of Service. You can update this
-                        content with your actual legal agreement...
+                        Welcome to JSEVEN. By using our platform, you agree to
+                        abide by these Terms of Service. Please read carefully.
+                      </p>
+                      <p>
+                        1. Users must provide accurate information when signing up.
+                      </p>
+                      <p>
+                        2. Unauthorized use of this system is strictly prohibited.
+                      </p>
+                      <p>
+                        3. JSEVEN reserves the right to update terms at any time.
                       </p>
                     </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button className="bg-orange-500 text-white hover:bg-orange-600">
+                          Close
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
                   </DialogContent>
                 </Dialog>{" "}
                 and{" "}
@@ -149,16 +198,34 @@ export default function Signup() {
                   <DialogTrigger className="text-blue-400 hover:underline">
                     Privacy Policy
                   </DialogTrigger>
-                  <DialogContent className="bg-white rounded-lg shadow-lg">
+                  <DialogContent className="bg-white rounded-lg shadow-lg max-w-lg">
                     <DialogHeader>
                       <DialogTitle>Privacy Policy</DialogTitle>
                     </DialogHeader>
-                    <div className="text-sm text-gray-700">
+                    <div className="text-sm text-gray-700 space-y-3 max-h-[50vh] overflow-y-auto">
                       <p>
-                        This is a sample Privacy Policy. You can describe how
-                        you collect, store, and use user data here...
+                        JSEVEN values your privacy. This policy explains how we
+                        handle your personal data.
+                      </p>
+                      <p>
+                        - We collect only essential information for account
+                        creation and usage.
+                      </p>
+                      <p>
+                        - We do not sell or share your information with third
+                        parties without consent.
+                      </p>
+                      <p>
+                        - Users can request data deletion by contacting support.
                       </p>
                     </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button className="bg-orange-500 text-white hover:bg-orange-600">
+                          Close
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
                   </DialogContent>
                 </Dialog>
               </span>
@@ -172,10 +239,7 @@ export default function Signup() {
             </Button>
             <p className="text-sm text-center text-gray-400 mt-2 ">
               Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-blue-400 font-semibold hover:underline"
-              >
+              <Link to="/login" className="text-blue-400 font-semibold hover:underline">
                 Log in
               </Link>
             </p>
