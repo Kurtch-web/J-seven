@@ -1,104 +1,103 @@
 // pages/N.AdminDashboard/Suppliers/SupplierTable.tsx
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, ChevronDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Pencil, Trash2 } from "lucide-react";
 import type { Supplier, SupplierDisplayKeys } from "./types";
-import { useState, useRef, useEffect } from "react";
 
 type Props = {
   suppliers: Supplier[];
+  visibleColumns: SupplierDisplayKeys[];
+  columns: { key: SupplierDisplayKeys; label: string }[];
+  sortKey: SupplierDisplayKeys | null;
+  sortOrder: "asc" | "desc";
+  onSortToggle: (key: SupplierDisplayKeys) => void;
+  getSupplierField: (s: Supplier, key: SupplierDisplayKeys) => string;
   onEdit: (supplier: Supplier) => void;
   onDelete: (id: number) => void;
-  visibleColumns: SupplierDisplayKeys[];
-  setVisibleColumns: React.Dispatch<React.SetStateAction<SupplierDisplayKeys[]>>;
+  selectedIds: number[];
+  setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default function SupplierTable({
   suppliers,
+  visibleColumns,
+  columns,
+  sortKey,
+  sortOrder,
+  onSortToggle,
+  getSupplierField,
   onEdit,
   onDelete,
-  visibleColumns,
-  setVisibleColumns,
+  selectedIds,
+  setSelectedIds,
 }: Props) {
-  const columns: { key: SupplierDisplayKeys; label: string }[] = [
-    { key: "businessName", label: "Business Name" },
-    { key: "email", label: "Email" },
-    { key: "phone", label: "Phone Number" },
-    { key: "dateAdded", label: "Date Added" },
-  ];
+  const toggleSelectAll = () => {
+    if (selectedIds.length === suppliers.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(suppliers.map((s) => s.id));
+    }
+  };
 
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  const toggleColumn = (key: SupplierDisplayKeys) => {
-    setVisibleColumns((prev) =>
-      prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
+  const toggleSelect = (id: number) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
     );
   };
 
   return (
     <div className="overflow-x-auto border border-slate-700 rounded">
-      <div className="flex justify-end p-2">
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setDropdownOpen((v) => !v)}
-            className="inline-flex items-center gap-2 px-3 py-1.5 border rounded bg-slate-700 text-white hover:bg-slate-600"
-          >
-            Columns
-            <ChevronDown
-              size={14}
-              className={dropdownOpen ? "transform rotate-180 transition-transform" : "transition-transform"}
-            />
-          </button>
-
-          <div
-            className={`origin-top-right absolute right-0 mt-2 w-52 bg-slate-800 border border-slate-700 rounded shadow-lg z-30
-              transform transition-all duration-180 ease-out
-              ${dropdownOpen ? "opacity-100 translate-y-0 scale-100 pointer-events-auto" : "opacity-0 -translate-y-2 scale-95 pointer-events-none"}`}
-          >
-            <div className="p-2">
-              {columns.map((col) => (
-                <label
-                  key={col.key}
-                  className="flex items-center gap-2 px-2 py-1 rounded hover:bg-slate-700 cursor-pointer text-sm text-slate-200"
-                >
-                  <input
-                    type="checkbox"
-                    checked={visibleColumns.includes(col.key)}
-                    onChange={() => toggleColumn(col.key)}
-                    className="w-4 h-4"
-                  />
-                  <span>{col.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <table className="w-full text-sm text-white">
         <thead className="bg-slate-700">
           <tr>
+            {/* Master checkbox */}
+            <th className="p-3 w-10">
+              <Checkbox
+                checked={
+                  selectedIds.length === suppliers.length
+                    ? true
+                    : selectedIds.length === 0
+                    ? false
+                    : "indeterminate"
+                }
+                onCheckedChange={toggleSelectAll}
+              />
+            </th>
             <th className="p-3">Logo</th>
-            {columns.map(
-              (col) =>
-                visibleColumns.includes(col.key) && <th key={col.key} className="p-3">{col.label}</th>
+            {columns.map((col) =>
+              visibleColumns.includes(col.key) ? (
+                <th
+                  key={col.key}
+                  className="p-3 cursor-pointer select-none"
+                  onClick={() => onSortToggle(col.key)}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>{col.label}</span>
+                    {sortKey === col.key && (
+                      <span className="text-xs text-slate-300">
+                        {sortOrder === "asc" ? "↑" : "↓"}
+                      </span>
+                    )}
+                  </div>
+                </th>
+              ) : null
             )}
             <th className="p-3">Actions</th>
           </tr>
         </thead>
         <tbody>
           {suppliers.map((supplier) => (
-            <tr key={supplier.id} className="border-t border-slate-600 hover:bg-slate-800">
+            <tr
+              key={supplier.id}
+              className="border-t border-slate-600 hover:bg-slate-800"
+            >
+              {/* Row checkbox */}
+              <td className="p-3 w-10">
+                <Checkbox
+                  checked={selectedIds.includes(supplier.id)}
+                  onCheckedChange={() => toggleSelect(supplier.id)}
+                />
+              </td>
               <td className="p-3">
                 {supplier.logo ? (
                   <img
@@ -112,11 +111,12 @@ export default function SupplierTable({
                   </div>
                 )}
               </td>
-              {columns.map(
-                (col) =>
-                  visibleColumns.includes(col.key) && (
-                    <td key={col.key} className="p-3">{supplier[col.key]}</td>
-                  )
+              {columns.map((col) =>
+                visibleColumns.includes(col.key) ? (
+                  <td key={col.key} className="p-3">
+                    {getSupplierField(supplier, col.key)}
+                  </td>
+                ) : null
               )}
               <td className="p-3 flex gap-2">
                 <Button

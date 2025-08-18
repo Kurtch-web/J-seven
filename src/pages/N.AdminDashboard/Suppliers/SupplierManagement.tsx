@@ -1,44 +1,46 @@
+// pages/N.AdminDashboard/Suppliers/SupplierManagement.tsx
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash2, ChevronDown } from "lucide-react";
+import { Plus, ChevronDown } from "lucide-react";
 import SupplierForm from "./SupplierForm";
+import SupplierTable from "./SupplierTable";
 import type { Supplier, SupplierDisplayKeys } from "./types";
 
 export default function SupplierManagement() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([
     {
       id: 1,
-      logo: "https://via.placeholder.com/40",
+      logo: "",
       businessName: "ABC Electric Co.",
       email: "contact@abcelectric.com",
       phone: "123-456-7890",
       vatNumber: "VAT12345",
       address: { street: "123 Main St", city: "Manila", state: "NCR", postalCode: "1000" },
-      bankDetails: { bankName: "BPI", accountName: "ABC Electric", accountNumber: "1234567890" },
+      bankDetails: { bankName: "BPI", accountName: "ABC Electric", accountNumber: "1234567890", swiftCode: "" },
       attachments: [],
       dateAdded: "08/12/2025"
     },
     {
       id: 2,
-      logo: "https://via.placeholder.com/40",
+      logo: "",
       businessName: "Manila Power Supplies",
       email: "sales@manilapower.com",
       phone: "987-654-3210",
       vatNumber: "VAT67890",
       address: { street: "456 Rizal Ave", city: "Quezon City", state: "NCR", postalCode: "1100" },
-      bankDetails: { bankName: "Metrobank", accountName: "Manila Power Supplies", accountNumber: "9876543210" },
+      bankDetails: { bankName: "Metrobank", accountName: "Manila Power Supplies", accountNumber: "9876543210", swiftCode: "" },
       attachments: [],
       dateAdded: "08/10/2025"
     },
     {
       id: 3,
-      logo: "https://via.placeholder.com/40",
+      logo: "",
       businessName: "Global Electrical Trading",
       email: "info@globalelectrical.com",
       phone: "555-123-4567",
       vatNumber: "VAT54321",
       address: { street: "789 Makati Ave", city: "Makati", state: "NCR", postalCode: "1200" },
-      bankDetails: { bankName: "Landbank", accountName: "Global Electrical", accountNumber: "5432167890" },
+      bankDetails: { bankName: "Landbank", accountName: "Global Electrical", accountNumber: "5432167890", swiftCode: "" },
       attachments: [],
       dateAdded: "08/08/2025"
     }
@@ -76,6 +78,8 @@ export default function SupplierManagement() {
 
   const [sortKey, setSortKey] = useState<SupplierDisplayKeys | null>("dateAdded");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const toggleColumn = (key: SupplierDisplayKeys) => {
     setVisibleColumns((prev) =>
@@ -83,7 +87,7 @@ export default function SupplierManagement() {
     );
   };
 
-  const sortToggle = (key: SupplierDisplayKeys) => {
+  const onSortToggle = (key: SupplierDisplayKeys) => {
     if (sortKey === key) setSortOrder((s) => (s === "asc" ? "desc" : "asc"));
     else {
       setSortKey(key);
@@ -95,7 +99,14 @@ export default function SupplierManagement() {
     return s[key] ?? "";
   };
 
-  const sortedSuppliers = [...suppliers].sort((a, b) => {
+  const filteredSuppliers = suppliers.filter((s) =>
+    Object.values(s)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  const sortedSuppliers = [...filteredSuppliers].sort((a, b) => {
     if (!sortKey) return 0;
     const va = (getSupplierField(a, sortKey) || "").toString().toLowerCase();
     const vb = (getSupplierField(b, sortKey) || "").toString().toLowerCase();
@@ -128,12 +139,34 @@ export default function SupplierManagement() {
     setSuppliers((prev) => prev.filter((s) => s.id !== id));
   };
 
+  const handleBulkDelete = () => {
+    if (!confirm("Delete selected suppliers?")) return;
+    setSuppliers((prev) => prev.filter((s) => !selectedIds.includes(s.id)));
+    setSelectedIds([]);
+  };
+
   return (
     <section className="font-manrope">
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-white">Supplier Management</h2>
+
         <div className="flex items-center gap-3">
+          {/* Search */}
+          <input
+            type="text"
+            placeholder="Search suppliers..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="px-3 py-2 rounded bg-slate-800 border border-slate-600 text-white"
+          />
+
+          {/* Bulk Delete */}
+          {selectedIds.length > 0 && (
+            <Button variant="destructive" className="bg-red-700" onClick={handleBulkDelete}>
+              Delete Selected
+            </Button>
+          )}
+
           {/* Column Toggle */}
           <div className="relative" ref={dropdownRef}>
             <button
@@ -168,7 +201,7 @@ export default function SupplierManagement() {
             </div>
           </div>
 
-          {/* Add Supplier Button */}
+          {/* Add Button */}
           <Button
             onClick={openAddModal}
             className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2"
@@ -179,95 +212,28 @@ export default function SupplierManagement() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto border border-slate-700 rounded">
-        <table className="w-full text-sm text-white">
-          <thead className="bg-slate-700">
-            <tr>
-              <th className="p-3">Logo</th>
-              {columns.map((col) =>
-                visibleColumns.includes(col.key) ? (
-                  <th
-                    key={col.key}
-                    className="p-3 cursor-pointer"
-                    onClick={() => sortToggle(col.key)}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span>{col.label}</span>
-                      {sortKey === col.key && (
-                        <span className="text-xs text-slate-300">
-                          {sortOrder === "asc" ? "↑" : "↓"}
-                        </span>
-                      )}
-                    </div>
-                  </th>
-                ) : null
-              )}
-              <th className="p-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedSuppliers.map((supplier) => (
-              <tr
-                key={supplier.id}
-                className="border-t border-slate-600 hover:bg-slate-800"
-              >
-                <td className="p-3">
-                  {supplier.logo ? (
-                    <img
-                      src={supplier.logo}
-                      alt="logo"
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-400">
-                      N/A
-                    </div>
-                  )}
-                </td>
-                {columns.map((col) =>
-                  visibleColumns.includes(col.key) ? (
-                    <td key={col.key} className="p-3">
-                      {getSupplierField(supplier, col.key)}
-                    </td>
-                  ) : null
-                )}
-                <td className="p-3 flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-blue-500 border-blue-500"
-                    onClick={() => openEditModal(supplier)}
-                  >
-                    <Pencil size={14} />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-red-500 border-red-500"
-                    onClick={() => handleDelete(supplier.id)}
-                  >
-                    <Trash2 size={14} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <SupplierTable
+        suppliers={sortedSuppliers}
+        visibleColumns={visibleColumns}
+        columns={columns}
+        sortKey={sortKey}
+        sortOrder={sortOrder}
+        onSortToggle={onSortToggle}
+        getSupplierField={getSupplierField}
+        onEdit={openEditModal}
+        onDelete={handleDelete}
+        selectedIds={selectedIds}
+        setSelectedIds={setSelectedIds}
+      />
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.12)] backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-slate-800 p-6 rounded-lg border border-slate-700 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <SupplierForm
-              initialData={editData}
-              isEditing={isEditing}
-              onSave={handleSave}
-              onCancel={() => setShowModal(false)}
-            />
-          </div>
-        </div>
-      )}
+      {/* Form */}
+      <SupplierForm
+        open={showModal}
+        onOpenChange={setShowModal}
+        initialData={editData}
+        isEditing={isEditing}
+        onSave={handleSave}
+      />
     </section>
   );
 }
