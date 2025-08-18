@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Upload, Trash2 } from "lucide-react";
 import type { Supplier, Address, BankDetails } from "./types";
 
@@ -8,7 +9,7 @@ const emptyBank: BankDetails = { bankName: "", accountName: "", accountNumber: "
 
 type SupplierFormProps = {
   initialData?: Supplier | null;
-  isEditing: boolean; 
+  isEditing: boolean;
   onSave: (supplier: Supplier) => void;
   onCancel: () => void;
 };
@@ -73,17 +74,15 @@ export default function SupplierForm({ initialData, onSave, onCancel }: Supplier
     if (!form.email.trim()) return alert("Email is required.");
     if (!form.phone.trim()) return alert("Phone is required.");
 
-    const dateAdded =
-      form.dateAdded || new Date().toLocaleDateString("en-US");
-
+    const dateAdded = form.dateAdded || new Date().toLocaleDateString("en-US");
     onSave({ ...form, dateAdded });
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 font-manrope text-sm text-white">
       {/* Logo Upload */}
       <div>
-        <label className="block mb-1 text-sm text-slate-300">Logo</label>
+        <label className="block mb-1 text-slate-300">Logo</label>
         <div className="border-2 border-dashed border-slate-600 rounded-lg p-4 text-center">
           {form.logo ? (
             <img
@@ -94,104 +93,119 @@ export default function SupplierForm({ initialData, onSave, onCancel }: Supplier
           ) : (
             <Upload className="mx-auto mb-2 text-slate-400" size={32} />
           )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleLogoUpload}
-            className="block w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500"
-          />
+          <Input type="file" accept="image/*" onChange={handleLogoUpload} />
         </div>
       </div>
 
       {/* Basic Info */}
-      <input
-        placeholder="Business Name"
-        value={form.businessName}
-        onChange={(e) => setForm((p) => ({ ...p, businessName: e.target.value }))}
-        className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-      />
-
-      <div className="grid grid-cols-2 gap-2">
-        <input
-          placeholder="Email"
-          type="email"
-          value={form.email}
-          onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-        />
-        <input
-          placeholder="Phone Number"
-          value={form.phone}
-          onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
+      <div>
+        <label className="block mb-1 text-slate-300">Business Name</label>
+        <Input
+          value={form.businessName}
+          onChange={(e) => setForm((p) => ({ ...p, businessName: e.target.value }))}
+          className="bg-slate-900 border-slate-600"
         />
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block mb-1 text-slate-300">Email</label>
+          <Input
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+            className="bg-slate-900 border-slate-600"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 text-slate-300">Phone Number</label>
+          <Input
+            value={form.phone}
+            onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+            className="bg-slate-900 border-slate-600"
+          />
+        </div>
+      </div>
+
       {/* VAT */}
-      <input
-        placeholder="VAT Number"
-        value={form.vatNumber || ""}
-        onChange={(e) => setForm((p) => ({ ...p, vatNumber: e.target.value }))}
-        className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
-      />
+      <div>
+        <label className="block mb-1 text-slate-300">VAT Number</label>
+        <Input
+          value={form.vatNumber || ""}
+          onChange={(e) => setForm((p) => ({ ...p, vatNumber: e.target.value }))}
+          className="bg-slate-900 border-slate-600"
+        />
+      </div>
 
       {/* Address */}
       <div>
-        <h4 className="text-sm text-slate-200 mb-2">Address</h4>
-        <input
-          placeholder="Street Address"
+        <h4 className="text-sm text-slate-200 pb-2 border-b border-slate-700 font-semibold">
+          Address
+        </h4>
+        <br />
+        <label className="block mb-1 text-slate-300">Street Address</label>
+        <Input
           value={form.address.street}
           onChange={(e) => updateAddress("street", e.target.value)}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white mb-2"
+          className="bg-slate-900 border-slate-600 mb-2"
         />
-        <div className="grid grid-cols-3 gap-2">
-          <input
-            placeholder="City / Town Name"
-            value={form.address.city}
-            onChange={(e) => updateAddress("city", e.target.value)}
-            className="p-2 rounded bg-slate-900 border border-slate-600 text-white"
-          />
-          <input
-            placeholder="State / Province"
-            value={form.address.state}
-            onChange={(e) => updateAddress("state", e.target.value)}
-            className="p-2 rounded bg-slate-900 border border-slate-600 text-white"
-          />
-          <input
-            placeholder="Postal Code / Zip Code"
-            value={form.address.postalCode}
-            onChange={(e) => updateAddress("postalCode", e.target.value)}
-            className="p-2 rounded bg-slate-900 border border-slate-600 text-white"
-          />
+        <div className="grid grid-cols-3 gap-3">
+          <div>
+            <label className="block mb-1 text-slate-300">City</label>
+            <Input
+              value={form.address.city}
+              onChange={(e) => updateAddress("city", e.target.value)}
+              className="bg-slate-900 border-slate-600"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-slate-300">State</label>
+            <Input
+              value={form.address.state}
+              onChange={(e) => updateAddress("state", e.target.value)}
+              className="bg-slate-900 border-slate-600"
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-slate-300">Postal Code</label>
+            <Input
+              value={form.address.postalCode}
+              onChange={(e) => updateAddress("postalCode", e.target.value)}
+              className="bg-slate-900 border-slate-600"
+            />
+          </div>
         </div>
       </div>
 
       {/* Bank Details */}
       <div>
-        <h4 className="text-sm text-slate-200 mb-2">Bank Details</h4>
-        <input
-          placeholder="Bank Name"
+        <h4 className="text-sm text-slate-200 pb-2 border-b border-slate-700 font-semibold">
+          Bank Details
+        </h4>
+        <br />
+        <label className="block mb-1 text-slate-300">Bank Name</label>
+        <Input
           value={form.bankDetails.bankName}
           onChange={(e) => updateBankDetails("bankName", e.target.value)}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white mb-2"
+          className="bg-slate-900 border-slate-600 mb-2"
         />
-        <input
-          placeholder="Account Name"
+        <label className="block mb-1 text-slate-300">Account Name</label>
+        <Input
           value={form.bankDetails.accountName}
           onChange={(e) => updateBankDetails("accountName", e.target.value)}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white mb-2"
+          className="bg-slate-900 border-slate-600 mb-2"
         />
-        <input
-          placeholder="Account Number"
+        <label className="block mb-1 text-slate-300">Account Number</label>
+        <Input
           value={form.bankDetails.accountNumber}
           onChange={(e) => updateBankDetails("accountNumber", e.target.value)}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white mb-2"
+          className="bg-slate-900 border-slate-600 mb-2"
         />
-        <input
-          placeholder="SWIFT / BIC"
+        <label className="block mb-1 text-slate-300">SWIFT / BIC</label>
+        <Input
           value={form.bankDetails.swiftCode}
           onChange={(e) => updateBankDetails("swiftCode", e.target.value)}
-          className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white"
+          className="bg-slate-900 border-slate-600"
         />
       </div>
 
@@ -222,38 +236,19 @@ export default function SupplierForm({ initialData, onSave, onCancel }: Supplier
           ) : (
             <Upload className="mx-auto mb-2 text-slate-400" size={32} />
           )}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleAttachmentsUpload}
-            className="block w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500"
-          />
+          <Input type="file" accept="image/*" multiple onChange={handleAttachmentsUpload} />
         </div>
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-3">
-        <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700 text-white">
+      <div className="flex gap-3 justify-end">
+        <Button onClick={handleSave} className="bg-orange-500 hover:bg-orange-600">
           {form.id ? "Update Supplier" : "Add Supplier"}
         </Button>
         <Button
-          onClick={() => {
-            setForm({
-              id: 0,
-              logo: "",
-              businessName: "",
-              email: "",
-              phone: "",
-              vatNumber: "",
-              address: { ...emptyAddress },
-              bankDetails: { ...emptyBank },
-              attachments: [],
-              dateAdded: "",
-            });
-            onCancel();
-          }}
-          className="bg-slate-600 hover:bg-slate-700 text-white"
+          variant="outline"
+          onClick={onCancel}
+          className="border-slate-500 text-slate-300 hover:bg-slate-700"
         >
           Cancel
         </Button>
