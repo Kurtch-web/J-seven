@@ -2,16 +2,38 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import login from "@/assets/images/login.jpg";
 
 export default function Login() {
   const [showRecovery, setShowRecovery] = useState(false);
   const [recoveryInput, setRecoveryInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // ⏳ Simulate API request
+    setTimeout(() => {
+      setLoading(false);
+      alert("Logged in successfully!");
+    }, 1500);
+  };
 
   const handleRecovery = (e: React.FormEvent) => {
     e.preventDefault();
     alert(`Recovery link sent to: ${recoveryInput}`);
+    setShowRecovery(false);
+    setRecoveryInput("");
   };
 
   return (
@@ -38,10 +60,12 @@ export default function Login() {
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Home
           </Link>
-          <br></br>
-          <br></br>
+          <br />
+          <br />
           <div>
-            <p className="text-sm text-gray-400 font-bold font-manrope">WELCOME BACK</p>
+            <p className="text-sm text-gray-400 font-bold font-manrope">
+              WELCOME BACK
+            </p>
             <h1 className="text-4xl font-bold">
               Log in to{" "}
               <span className="text-orange-500 font-playfair">J</span>
@@ -50,7 +74,7 @@ export default function Login() {
           </div>
 
           {/* Email/Password Form */}
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-4" onSubmit={handleLogin}>
             <div>
               <label className="block text-sm font-semibold mb-1">Email</label>
               <Input type="email" required />
@@ -63,7 +87,7 @@ export default function Login() {
             <div className="text-sm text-right">
               <button
                 type="button"
-                onClick={() => setShowRecovery(!showRecovery)}
+                onClick={() => setShowRecovery(true)}
                 className="text-blue-400 hover:underline font-bold"
               >
                 Forgot password?
@@ -73,33 +97,20 @@ export default function Login() {
             <div className="flex flex-col md:flex-row gap-4 mt-4">
               <Button
                 type="submit"
-                className="w-full bg-slate-600 hover:bg-slate-500 text-white font-bold"
+                disabled={loading}
+                className="w-full bg-slate-600 hover:bg-slate-500 text-white font-bold flex items-center justify-center gap-2"
               >
-                Login
+                {loading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </div>
           </form>
-
-          {/* Recovery Form */}
-          {showRecovery && (
-            <form className="mt-6 space-y-3" onSubmit={handleRecovery}>
-              <label className="block text-sm font-semibold">
-                Recover using email or mobile number:
-              </label>
-              <Input
-                type="text"
-                required
-                value={recoveryInput}
-                onChange={(e) => setRecoveryInput(e.target.value)}
-              />
-              <Button
-                type="submit"
-                className="w-full bg-orange-600 text-white hover:bg-orange-700 font-bold"
-              >
-                Send Recovery Link
-              </Button>
-            </form>
-          )}
 
           <p className="text-center text-sm text-gray-400 mt-2">
             Don’t have an account?{" "}
@@ -113,7 +124,7 @@ export default function Login() {
         </div>
       </div>
 
-      {/* RIGHT: Background image only */}
+      {/* RIGHT: Background image */}
       <div className="hidden md:block">
         <img
           src={login}
@@ -121,6 +132,48 @@ export default function Login() {
           className="w-full h-full object-cover"
         />
       </div>
+
+      {/* Forgot Password Modal */}
+      <Dialog open={showRecovery} onOpenChange={setShowRecovery}>
+        <DialogContent className="bg-slate-900 border border-slate-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold text-orange-500">
+              Password Recovery
+            </DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Enter your email to receive a recovery link.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form className="space-y-3" onSubmit={handleRecovery}>
+            <Input
+              type="text"
+              placeholder="email@account.com"
+              required
+              value={recoveryInput}
+              onChange={(e) => setRecoveryInput(e.target.value)}
+              className="bg-slate-800 border-slate-700 text-white"
+            />
+
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                className="border-slate-600 text-gray-300 hover:bg-slate-800"
+                onClick={() => setShowRecovery(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="bg-orange-600 text-white hover:bg-orange-700 font-bold"
+              >
+                Send Recovery Link
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
