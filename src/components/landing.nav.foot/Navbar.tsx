@@ -1,7 +1,8 @@
-import { Building2, Menu, ShoppingCart } from "lucide-react";
+import { Menu, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import jsevenLogo from "@/assets/images/jseven.png"; // ✅ import logo
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -10,19 +11,35 @@ export function Navbar() {
     <nav className="bg-slate-800/90 backdrop-blur-md sticky top-0 z-50 border-b border-white/5 shadow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Brand */}
+          {/* Brand with logo + text */}
           <div className="flex items-center">
-            <Building2 className="h-8 w-8 text-orange-500 mr-3" />
-            <span className="text-2xl text-orange-500 font-playfair font-bold">J</span>
-            <span className="text-2xl text-blue-400 font-playfair font-bold">SEVEN</span>
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src={jsevenLogo}
+                alt="JSEVEN Logo"
+                className="h-7 sm:h-9 lg:h-10 w-auto object-contain"
+              />
+              <span className="text-lg sm:text-xl lg:text-2xl font-playfair font-bold">
+                <span className="text-orange-500">J</span>
+                <span className="text-blue-400">SEVEN</span>
+              </span>
+            </Link>
           </div>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-white hover:text-orange-400 font-manrope">Features</a>
-            <a href="#about" className="text-white hover:text-orange-400 font-manrope">About</a>
-            <a href="#how" className="text-white hover:text-orange-400 font-manrope">How It Works</a>
-            <a href="#contact" className="text-white hover:text-orange-400 font-manrope">Contact</a>
+          {/* Desktop Nav (shows only on lg and above) */}
+          <div className="hidden lg:flex items-center space-x-4 xl:space-x-8">
+            <a href="#features" className="text-white hover:text-orange-400 font-manrope">
+              Features
+            </a>
+            <a href="#about" className="text-white hover:text-orange-400 font-manrope">
+              About
+            </a>
+            <a href="#how" className="text-white hover:text-orange-400 font-manrope">
+              How It Works
+            </a>
+            <a href="#contact" className="text-white hover:text-orange-400 font-manrope">
+              Contact
+            </a>
 
             {/* Shop Icon */}
             <Link to="/shop" className="text-white hover:text-orange-400">
@@ -30,13 +47,19 @@ export function Navbar() {
             </Link>
 
             <Link to="/login">
-              <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-500 font-manrope">
+              <Button
+                size="sm"
+                className="bg-blue-600 text-white hover:bg-blue-500 font-manrope md:px-4 md:py-2 lg:px-5 lg:py-2.5"
+              >
                 Login
               </Button>
             </Link>
 
             <Link to="/signup">
-              <Button size="lg" className="bg-orange-600 text-white hover:bg-orange-500 font-manrope">
+              <Button
+                size="sm"
+                className="bg-orange-600 text-white hover:bg-orange-500 font-manrope md:px-4 md:py-2 lg:px-5 lg:py-2.5"
+              >
                 Sign Up
               </Button>
             </Link>
@@ -44,7 +67,7 @@ export function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            className="md:hidden p-2 text-white hover:text-blue-300"
+            className="lg:hidden p-2 text-white hover:text-blue-300"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -55,10 +78,16 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-slate/70 backdrop-blur-md shadow-md border-t border-white/10">
-          <a href="#features" className="block text-white hover:text-blue-300">Features</a>
-          <a href="#about" className="block text-white hover:text-blue-300">About</a>
-          <a href="#contact" className="block text-white hover:text-blue-300">Contact</a>
+        <div className="lg:hidden px-4 pt-2 pb-4 space-y-2 bg-slate-900/90 backdrop-blur-md shadow-md border-t border-white/10">
+          <a href="#features" className="block text-white hover:text-blue-300">
+            Features
+          </a>
+          <a href="#about" className="block text-white hover:text-blue-300">
+            About
+          </a>
+          <a href="#contact" className="block text-white hover:text-blue-300">
+            Contact
+          </a>
 
           {/* Shop in mobile view */}
           <Link to="/shop" className="block text-white hover:text-orange-400">
