@@ -60,7 +60,7 @@ export default function ResetPasswordForm({ onDone }: ResetPasswordFormProps) {
       <DialogFooter>
         <Button
           type="submit"
-          className="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold"
+          className="w-full bg-orange-600 text-white hover:bg-orange-700 font-bold"
         >
           Reset Password
         </Button>

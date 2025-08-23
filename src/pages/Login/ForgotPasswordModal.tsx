@@ -40,7 +40,7 @@ export default function ForgotPasswordModal({
             </TabsTrigger>
             <TabsTrigger
               value="reset"
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md px-3 py-2 text-sm font-medium transition-colors"
+              className="data-[state=active]:bg-orange-600 data-[state=active]:text-white rounded-md px-3 py-2 text-sm font-medium transition-colors"
             >
               Reset Password
             </TabsTrigger>
