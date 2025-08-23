@@ -2,39 +2,38 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
-import { Eye, EyeOff } from "lucide-react";
+import PasswordField from "./PasswordField";
 
 interface ResetPasswordFormProps {
-  onSuccess?: () => void;
+  onDone: () => void;
 }
 
-export default function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps) {
-  const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+export default function ResetPasswordForm({ onDone }: ResetPasswordFormProps) {
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetCode, setResetCode] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
-  const handleReset = (e: React.FormEvent) => {
+  const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
     alert(
-      `Password reset for ${email} with code ${code}. New password: ${newPassword}`
+      `Password reset for ${resetEmail} using code ${resetCode}. New password: ${newPassword}`
     );
-    setEmail("");
-    setCode("");
+    setResetEmail("");
+    setResetCode("");
     setNewPassword("");
-    if (onSuccess) onSuccess();
+    onDone();
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleReset}>
+    <form className="space-y-4 mt-4" onSubmit={handleResetPassword}>
       <div>
         <label className="block text-sm font-semibold mb-1">Email</label>
         <Input
           type="email"
           placeholder="you@example.com"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={resetEmail}
+          onChange={(e) => setResetEmail(e.target.value)}
           className="bg-slate-800 border-slate-700 text-white"
         />
       </div>
@@ -44,30 +43,19 @@ export default function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps)
           type="text"
           placeholder="Enter code"
           required
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
+          value={resetCode}
+          onChange={(e) => setResetCode(e.target.value)}
           className="bg-slate-800 border-slate-700 text-white"
         />
       </div>
       <div>
         <label className="block text-sm font-semibold mb-1">New Password</label>
-        <div className="relative">
-          <Input
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter new password"
-            required
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="bg-slate-800 border-slate-700 text-white pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
-        </div>
+        <PasswordField
+          name="newPassword"
+          required
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
       </div>
       <DialogFooter>
         <Button

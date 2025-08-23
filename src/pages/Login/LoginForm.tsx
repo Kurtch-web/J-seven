@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import PasswordField from "./PasswordField"; // reuse same PasswordField
 
-type Props = {
+interface LoginFormProps {
   onForgotPassword: () => void;
-};
+}
 
-export default function LoginForm({ onForgotPassword }: Props) {
-  const [showPassword, setShowPassword] = useState(false);
+export default function LoginForm({ onForgotPassword }: LoginFormProps) {
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -27,23 +27,9 @@ export default function LoginForm({ onForgotPassword }: Props) {
         <label className="block text-sm font-semibold mb-1">Email</label>
         <Input type="email" required />
       </div>
-
       <div>
         <label className="block text-sm font-semibold mb-1">Password</label>
-        <div className="relative">
-          <Input
-            type={showPassword ? "text" : "password"}
-            required
-            className="pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white"
-          >
-            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-          </button>
-        </div>
+        <PasswordField name="password" required />
       </div>
 
       <div className="text-sm text-right">
@@ -56,13 +42,22 @@ export default function LoginForm({ onForgotPassword }: Props) {
         </button>
       </div>
 
-      <Button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-slate-600 hover:bg-slate-500 text-white font-bold flex items-center justify-center gap-2"
-      >
-        {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Logging in...</> : "Login"}
-      </Button>
+      <div className="flex flex-col md:flex-row gap-4 mt-4">
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-orange-500 text-white hover:bg-orange-600 font-bold flex items-center justify-center gap-2"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Logging in...
+            </>
+          ) : (
+            "Login"
+          )}
+        </Button>
+      </div>
     </form>
   );
 }
