@@ -9,7 +9,7 @@ import { Testimonials } from "./components/landing.sections/Testimonials";
 import { FAQ } from "./components/landing.sections/faq";
 import { Footer } from "./components/landing.nav.foot/Footer";
 import Login from "./pages/Login/Login";
-import Signup from "./pages/Signup";
+import Signup from "./pages/Signup/Signup";
 import AdminDashboard from "./pages/N.AdminDashboard/BusinessDashB/DashboardView";
 import SuperAdminDashboard from "./pages/S.AdminDashboard/SuperAdminDashboard";
 
