@@ -2,7 +2,7 @@ import { Menu, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import jsevenLogo from "@/assets/images/jseven.png";
+import jsevenLogo from "/jseven.png"; // ✅ make sure it's in public/
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,17 +17,17 @@ export function Navbar() {
               <img
                 src={jsevenLogo}
                 alt="JSEVEN Logo"
-                className="h-7 sm:h-9 lg:h-10 w-auto object-contain"
+                className="h-8 w-auto object-contain sm:h-10"
               />
-              <span className="text-lg sm:text-xl lg:text-2xl font-playfair font-bold">
+              <span className="text-lg sm:text-2xl font-playfair font-bold tracking-tight">
                 <span className="text-orange-500">J</span>
                 <span className="text-blue-400">SEVEN</span>
               </span>
             </Link>
           </div>
 
-          {/* Desktop Nav (shows only on lg and above) */}
-          <div className="hidden lg:flex items-center space-x-4 xl:space-x-8">
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center space-x-8">
             <a
               href="#features"
               className="text-white hover:text-orange-400 font-manrope"
@@ -60,8 +60,8 @@ export function Navbar() {
 
             <Link to="/login">
               <Button
-                size="sm"
-                className="bg-blue-600 text-white hover:bg-blue-500 font-manrope md:px-4 md:py-2 lg:px-5 lg:py-2.5"
+                size="lg"
+                className="bg-blue-600 text-white hover:bg-blue-500 font-manrope"
               >
                 Login
               </Button>
@@ -69,8 +69,8 @@ export function Navbar() {
 
             <Link to="/signup">
               <Button
-                size="sm"
-                className="bg-orange-600 text-white hover:bg-orange-500 font-manrope md:px-4 md:py-2 lg:px-5 lg:py-2.5"
+                size="lg"
+                className="bg-orange-600 text-white hover:bg-orange-500 font-manrope"
               >
                 Sign Up
               </Button>
@@ -79,7 +79,7 @@ export function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            className="lg:hidden p-2 text-white hover:text-blue-300"
+            className="md:hidden p-2 text-white hover:text-blue-300"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
           >
@@ -90,30 +90,47 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="lg:hidden px-4 pt-2 pb-4 space-y-2 bg-slate-900/90 backdrop-blur-md shadow-md border-t border-white/10">
-          <a href="#features" className="block text-white hover:text-blue-300">
+        <div className="md:hidden px-6 pt-6 pb-8 space-y-4 bg-slate-900/95 backdrop-blur-md shadow-lg border-t border-white/10 text-center">
+          <a
+            href="#features"
+            className="block text-sm text-white hover:text-orange-400"
+          >
             Features
           </a>
-          <a href="#about" className="block text-white hover:text-blue-300">
+          <a
+            href="#about"
+            className="block text-sm text-white hover:text-orange-400"
+          >
             About
           </a>
-          <a href="#contact" className="block text-white hover:text-blue-300">
+          <a
+            href="#how"
+            className="block text-sm text-white hover:text-orange-400"
+          >
+            How It Works
+          </a>
+          <a
+            href="#contact"
+            className="block text-sm text-white hover:text-orange-400"
+          >
             Contact
           </a>
 
           {/* Shop in mobile view */}
-          <Link to="/shop" className="block text-white hover:text-orange-400">
-            <div className="flex items-center gap-2">
-              <ShoppingCart className="h-5 w-5" />
-              <span>Shop</span>
-            </div>
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-2 text-sm text-white hover:text-orange-400"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span>Shop</span>
           </Link>
 
-          <div className="flex gap-2 mt-2">
+          {/* Login/Signup buttons */}
+          <div className="flex flex-col gap-3 mt-6">
             <Link to="/login" className="w-full">
               <Button
                 size="sm"
-                className="w-full bg-orange-600 text-white hover:bg-orange-500"
+                className="w-full bg-blue-600 text-white hover:bg-blue-500"
               >
                 Login
               </Button>
@@ -121,7 +138,7 @@ export function Navbar() {
             <Link to="/signup" className="w-full">
               <Button
                 size="sm"
-                className="w-full bg-blue-600 text-white hover:bg-blue-500"
+                className="w-full bg-orange-600 text-white hover:bg-orange-500"
               >
                 Sign Up
               </Button>
