@@ -2,7 +2,7 @@ import { Menu, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import jsevenLogo from "@/assets/images/jseven.png"; // ✅ import logo
+import jsevenLogo from "@/assets/images/jseven.png";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,16 +28,28 @@ export function Navbar() {
 
           {/* Desktop Nav (shows only on lg and above) */}
           <div className="hidden lg:flex items-center space-x-4 xl:space-x-8">
-            <a href="#features" className="text-white hover:text-orange-400 font-manrope">
+            <a
+              href="#features"
+              className="text-white hover:text-orange-400 font-manrope"
+            >
               Features
             </a>
-            <a href="#about" className="text-white hover:text-orange-400 font-manrope">
+            <a
+              href="#about"
+              className="text-white hover:text-orange-400 font-manrope"
+            >
               About
             </a>
-            <a href="#how" className="text-white hover:text-orange-400 font-manrope">
+            <a
+              href="#how"
+              className="text-white hover:text-orange-400 font-manrope"
+            >
               How It Works
             </a>
-            <a href="#contact" className="text-white hover:text-orange-400 font-manrope">
+            <a
+              href="#contact"
+              className="text-white hover:text-orange-400 font-manrope"
+            >
               Contact
             </a>
 
@@ -99,12 +111,18 @@ export function Navbar() {
 
           <div className="flex gap-2 mt-2">
             <Link to="/login" className="w-full">
-              <Button size="sm" className="w-full bg-orange-500 text-white hover:bg-white/10">
+              <Button
+                size="sm"
+                className="w-full bg-orange-600 text-white hover:bg-orange-500"
+              >
                 Login
               </Button>
             </Link>
             <Link to="/signup" className="w-full">
-              <Button size="sm" className="w-full bg-blue-600 text-white hover:bg-blue-500">
+              <Button
+                size="sm"
+                className="w-full bg-blue-600 text-white hover:bg-blue-500"
+              >
                 Sign Up
               </Button>
             </Link>
