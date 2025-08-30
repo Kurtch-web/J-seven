@@ -1,30 +1,32 @@
-import { Building2, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 export function Footer() {
   return (
     <footer id="contact" className="bg-slate-800 text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
           {/* Logo & Description */}
-          <div>
-            <div className="flex items-center mb-6">
-              <Building2 className="h-8 w-8 text-orange-500 mr-3" />
-              <span className="text-2xl font-semibold font-playfair text-orange-500">
-                J
-              </span>
-              <span className="text-2xl font-semibold font-playfair text-blue-400">
-                SEVEN
+          <div className="text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start mb-6">
+              <img
+                src="/jseven.png"
+                alt="JSEVEN Logo"
+                className="h-8 w-auto object-contain sm:h-10 mr-2"
+              />
+              <span className="text-xl sm:text-2xl font-playfair font-bold">
+                <span className="text-orange-500">J</span>
+                <span className="text-blue-400">SEVEN</span>
               </span>
             </div>
-            <p className="text-gray-400 mb-6 font-manrope">
+            <p className="text-gray-400 mb-6 font-manrope text-sm sm:text-base">
               Streamlines supply management and quotation generation for
               construction businesses—fast, reliable, and intuitive.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex justify-center md:justify-start space-x-4">
               {["f", "t", "in"].map((label, i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-slate-700 cursor-pointer"
+                  className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-slate-600 cursor-pointer"
                 >
                   <span className="text-sm font-semibold">{label}</span>
                 </div>
@@ -33,7 +35,7 @@ export function Footer() {
           </div>
 
           {/* Product Links */}
-          <div className="font-manrope">
+          <div className="font-manrope text-center sm:text-left">
             <h3 className="text-lg font-extrabold mb-6">Product</h3>
             <ul className="space-y-3 text-gray-400">
               <li>
@@ -55,7 +57,7 @@ export function Footer() {
           </div>
 
           {/* Company Links */}
-          <div className="font-manrope">
+          <div className="font-manrope text-center sm:text-left">
             <h3 className="text-lg font-extrabold mb-6">Company</h3>
             <ul className="space-y-3 text-gray-400">
               <li>
@@ -77,22 +79,21 @@ export function Footer() {
           </div>
 
           {/* Contact Info */}
-          <div className="font-manrope">
+          <div className="font-manrope text-center sm:text-left">
             <h3 className="text-lg font-extrabold mb-6">Contact</h3>
             <div className="space-y-4 text-gray-400 text-sm">
-              <div className="flex items-center">
+              <div className="flex justify-center sm:justify-start items-center">
                 <Mail className="h-4 w-4 mr-3" />
                 <span>support@jseven.com</span>
               </div>
-              <div className="flex items-center">
+              <div className="flex justify-center sm:justify-start items-center">
                 <Phone className="h-4 w-4 mr-3" />
                 <span>+63 912 345 6789</span>
               </div>
-              <div className="flex items-start">
+              <div className="flex justify-center sm:justify-start items-start">
                 <MapPin className="h-4 w-4 mr-3 mt-1" />
                 <span>
-                  456 Builder’s Lane
-                  <br />
+                  456 Builder’s Lane <br />
                   Makati City, PH 1212
                 </span>
               </div>
@@ -101,10 +102,11 @@ export function Footer() {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-slate-800 mt-12 pt-8 text-center text-gray-400 text-sm font-manrope">
-          <p>
+        <div className="border-t border-slate-700 mt-12 pt-8 text-center text-gray-400 text-sm font-manrope">
+          <p className="leading-relaxed">
             &copy; 2025 <span className="text-orange-500">J</span>
-            <span className="text-blue-400">SEVEN</span>. All rights reserved. |{" "}
+            <span className="text-blue-400">SEVEN</span>. All rights reserved.{" "}
+            <br className="sm:hidden" />
             <a href="#" className="hover:text-white">
               Privacy Policy
             </a>{" "}
