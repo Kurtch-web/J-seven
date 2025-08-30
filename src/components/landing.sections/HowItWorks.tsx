@@ -1,6 +1,6 @@
 export function HowItWorks() {
   return (
-    <section className="py-20 bg-gray-50 font-manrope">
+    <section id="how" className="py-20 bg-gray-50 font-manrope">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="text-center mb-16">
@@ -21,7 +21,8 @@ export function HowItWorks() {
             </div>
             <h3 className="text-xl font-bold mb-4">Upload Plans</h3>
             <p className="text-gray-600 text-sm font-medium">
-              Upload your architectural plans or select from our library of standard designs
+              Upload your architectural plans or select from our library of
+              standard designs
             </p>
           </div>
 
@@ -32,7 +33,8 @@ export function HowItWorks() {
             </div>
             <h3 className="text-xl font-bold mb-4">Set Location</h3>
             <p className="text-gray-600 text-sm font-medium">
-              Specify the project location for accurate regional pricing and labor costs
+              Specify the project location for accurate regional pricing and
+              labor costs
             </p>
           </div>
 
@@ -43,7 +45,8 @@ export function HowItWorks() {
             </div>
             <h3 className="text-xl font-bold mb-4">Generate Quote</h3>
             <p className="text-gray-600 text-sm font-medium">
-              Our system automatically calculates materials, labor, and total project costs
+              Our system automatically calculates materials, labor, and total
+              project costs
             </p>
           </div>
 
@@ -54,7 +57,8 @@ export function HowItWorks() {
             </div>
             <h3 className="text-xl font-bold mb-4">Export & Share</h3>
             <p className="text-gray-600 text-sm font-medium">
-              Download professional PDF proposals and share with clients instantly
+              Download professional PDF proposals and share with clients
+              instantly
             </p>
           </div>
         </div>
