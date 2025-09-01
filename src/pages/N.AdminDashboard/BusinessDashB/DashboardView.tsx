@@ -1,18 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, Bell, Headphones } from "lucide-react";
+import {
+  Menu,
+  Bell,
+  Headphones,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 
 import QuickOverview from "./QuickOverview";
 import SearchMaterials from "./SearchMaterials";
 import RecentNotifications from "./RecentNotifications";
 import ActivityTimeline from "./ActivityTimeline";
-import QuickActions from "./QuickActions"; // ⬅ New import
+import QuickActions from "./QuickActions";
 
 import MyStore from "../MyStore/MyStore";
 import MaterialsManager from "../MaterialsManagement/MaterialsManager";
 import QuotationTool from "../Quotation";
-import AccountSettings from "../AccountSettings";
+import AccountSettings from "../AccountSettings/AccountSettings";
 import ClientManagement from "../Clients/ClientManagement";
 import SupplierManagement from "../Suppliers/SupplierManagement";
 
@@ -20,8 +26,13 @@ export default function DashboardView() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // ✅ Notifications state
   const [unreadCount, setUnreadCount] = useState(3);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  // New: track if Account Settings dropdown is open
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
 
   const handleLogout = () => navigate("/");
 
@@ -29,18 +40,16 @@ export default function DashboardView() {
     dashboard: "Business Dashboard",
     store: "My Store",
     quotation: "Quotation Tool",
-    invoices: "Invoices",
     clients: "Client Management",
     suppliers: "Supplier Management",
     materials: "Materials Management",
-    settings: "Account Settings",
-  };
 
-  const handleNotificationsClick = () => {
-    setNotificationsOpen((prev) => !prev);
-    if (!notificationsOpen) {
-      setUnreadCount(0);
-    }
+    // new account sub-sections
+    "settings-profile": "User Profile",
+    "settings-security": "Security & Authentication",
+    "settings-notifications": "Notifications & Communication",
+    "settings-transactions": "Transaction History",
+    "settings-danger": "Danger Zone",
   };
 
   return (
@@ -77,10 +86,10 @@ export default function DashboardView() {
 
         {/* Right Section */}
         <div className="flex items-center gap-4 relative">
-          {/* Notifications */}
+          {/* ✅ Notifications */}
           <div className="relative">
             <button
-              onClick={handleNotificationsClick}
+              onClick={() => setNotificationsOpen((prev) => !prev)}
               className="relative p-2 hover:bg-slate-700 rounded-full"
             >
               <Bell size={20} />
@@ -99,6 +108,15 @@ export default function DashboardView() {
                   <li>✅ Your material listing was approved</li>
                   <li>💬 You have a new quotation request</li>
                 </ul>
+                <button
+                  className="mt-3 text-xs text-blue-400 hover:underline"
+                  onClick={() => {
+                    setUnreadCount(0);
+                    setNotificationsOpen(false);
+                  }}
+                >
+                  Mark all as read
+                </button>
               </div>
             )}
           </div>
@@ -147,16 +165,93 @@ export default function DashboardView() {
           </div>
 
           {/* Navigation */}
-          <nav className="space-y-8 text-sm font-bold">
-            {Object.entries(sectionTitles).map(([key, label]) => (
+          <nav className="space-y-6 text-sm font-bold">
+            <button
+              onClick={() => setActiveSection("dashboard")}
+              className="hover:text-orange-400 block w-full text-left"
+            >
+              Business Dashboard
+            </button>
+            <button
+              onClick={() => setActiveSection("store")}
+              className="hover:text-orange-400 block w-full text-left"
+            >
+              My Store
+            </button>
+            <button
+              onClick={() => setActiveSection("quotation")}
+              className="hover:text-orange-400 block w-full text-left"
+            >
+              Quotation Tool
+            </button>
+            <button
+              onClick={() => setActiveSection("clients")}
+              className="hover:text-orange-400 block w-full text-left"
+            >
+              Client Management
+            </button>
+            <button
+              onClick={() => setActiveSection("suppliers")}
+              className="hover:text-orange-400 block w-full text-left"
+            >
+              Supplier Management
+            </button>
+            <button
+              onClick={() => setActiveSection("materials")}
+              className="hover:text-orange-400 block w-full text-left"
+            >
+              Materials Management
+            </button>
+
+            {/* Account Settings dropdown */}
+            <div>
               <button
-                key={key}
-                onClick={() => setActiveSection(key)}
-                className="hover:text-orange-400 block w-full text-left"
+                onClick={() => setAccountMenuOpen((prev) => !prev)}
+                className="flex items-center justify-between w-full hover:text-orange-400"
               >
-                {label}
+                Account Settings
+                {accountMenuOpen ? (
+                  <ChevronDown size={16} />
+                ) : (
+                  <ChevronRight size={16} />
+                )}
               </button>
-            ))}
+
+              {accountMenuOpen && (
+                <div className="ml-4 mt-2 space-y-2 text-slate-300">
+                  <button
+                    onClick={() => setActiveSection("settings-profile")}
+                    className="block w-full text-left hover:text-orange-400"
+                  >
+                    User Profile
+                  </button>
+                  <button
+                    onClick={() => setActiveSection("settings-security")}
+                    className="block w-full text-left hover:text-orange-400"
+                  >
+                    Security & Authentication
+                  </button>
+                  <button
+                    onClick={() => setActiveSection("settings-notifications")}
+                    className="block w-full text-left hover:text-orange-400"
+                  >
+                    Notifications
+                  </button>
+                  <button
+                    onClick={() => setActiveSection("settings-transactions")}
+                    className="block w-full text-left hover:text-orange-400"
+                  >
+                    Transaction History
+                  </button>
+                  <button
+                    onClick={() => setActiveSection("settings-danger")}
+                    className="block w-full text-left hover:text-red-400"
+                  >
+                    Account Termination
+                  </button>
+                </div>
+              )}
+            </div>
           </nav>
         </aside>
 
@@ -165,11 +260,7 @@ export default function DashboardView() {
           {activeSection === "dashboard" && (
             <>
               <QuickOverview />
-
-              {/* Quick Actions */}
               <QuickActions onSelect={(section) => setActiveSection(section)} />
-
-              {/* Notifications + Timeline */}
               <section>
                 <h2 className="text-xl font-semibold mb-4 text-white">
                   Updates
@@ -183,7 +274,6 @@ export default function DashboardView() {
                   </div>
                 </div>
               </section>
-
               <SearchMaterials />
             </>
           )}
@@ -195,7 +285,11 @@ export default function DashboardView() {
           {activeSection === "quotation" && <QuotationTool />}
           {activeSection === "clients" && <ClientManagement />}
           {activeSection === "suppliers" && <SupplierManagement />}
-          {activeSection === "settings" && <AccountSettings />}
+
+          {/* Account Settings sections */}
+          {activeSection.startsWith("settings") && (
+            <AccountSettings section={activeSection} />
+          )}
         </main>
       </div>
     </div>
