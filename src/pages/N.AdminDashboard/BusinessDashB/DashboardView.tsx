@@ -48,17 +48,34 @@ export default function DashboardView() {
       {/* Topbar */}
       <header className="relative w-full bg-slate-800 px-6 py-4 border-b border-slate-700 flex justify-between items-center z-10">
         <div className="flex items-center gap-4">
-          <button className="md:hidden" onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
             <Menu size={22} />
           </button>
-          <div className="flex items-center gap-4 text-2xl font-bold">
-            <span className="text-orange-500 font-playfair">JSEVEN</span>
-            <span className="text-white text-base font-normal ml-4 hidden sm:inline font-manrope">
-              {sectionTitles[activeSection] || ""}
+
+          {/* Brand Logo */}
+          <div className="flex items-center gap-2">
+            <img
+              src="/jseven.png"
+              alt="JSEVEN Logo"
+              className="h-8 w-auto object-contain sm:h-10"
+            />
+            <span className="text-xl sm:text-2xl font-playfair font-bold">
+              <span className="text-orange-500">J</span>
+              <span className="text-blue-400">SEVEN</span>
             </span>
           </div>
+
+          {/* Section Title */}
+          <span className="text-white text-base font-normal ml-4 hidden sm:inline font-manrope">
+            {sectionTitles[activeSection] || ""}
+          </span>
         </div>
 
+        {/* Right Section */}
         <div className="flex items-center gap-4 relative">
           {/* Notifications */}
           <div className="relative">
@@ -95,7 +112,10 @@ export default function DashboardView() {
           </button>
 
           {/* Logout */}
-          <Button className="bg-orange-600 hover:bg-orange-700" onClick={handleLogout}>
+          <Button
+            className="bg-orange-600 hover:bg-orange-700"
+            onClick={handleLogout}
+          >
             Logout
           </Button>
         </div>
@@ -106,7 +126,11 @@ export default function DashboardView() {
         {/* Sidebar */}
         <aside
           className={`bg-slate-800 px-6 py-8 border-r border-slate-700 w-64 transition-all duration-200 md:relative z-30
-          ${sidebarOpen ? "absolute top-0 left-0 h-full block" : "hidden md:block"}`}
+          ${
+            sidebarOpen
+              ? "absolute top-0 left-0 h-full block"
+              : "hidden md:block"
+          }`}
         >
           {/* Profile */}
           <div className="mb-6">
@@ -147,7 +171,9 @@ export default function DashboardView() {
 
               {/* Notifications + Timeline */}
               <section>
-                <h2 className="text-xl font-semibold mb-4 text-white">Updates</h2>
+                <h2 className="text-xl font-semibold mb-4 text-white">
+                  Updates
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-slate-800 rounded-lg p-4 max-h-[300px] overflow-y-auto border border-slate-700">
                     <RecentNotifications />
@@ -162,7 +188,9 @@ export default function DashboardView() {
             </>
           )}
 
-          {activeSection === "store" && <MyStore onBack={() => setActiveSection("dashboard")} />}
+          {activeSection === "store" && (
+            <MyStore onBack={() => setActiveSection("dashboard")} />
+          )}
           {activeSection === "materials" && <MaterialsManager />}
           {activeSection === "quotation" && <QuotationTool />}
           {activeSection === "clients" && <ClientManagement />}
