@@ -17,7 +17,7 @@ import QuickActions from "./QuickActions";
 
 import MyStore from "../MyStore/MyStore";
 import MaterialsManager from "../MaterialsManagement/MaterialsManager";
-import QuotationTool from "../Quotation";
+import QuotationTool from "../Quotation/Quotation";
 import AccountSettings from "../AccountSettings/AccountSettings";
 import ClientManagement from "../Clients/ClientManagement";
 import SupplierManagement from "../Suppliers/SupplierManagement";
@@ -182,7 +182,7 @@ export default function DashboardView() {
               onClick={() => setActiveSection("quotation")}
               className="hover:text-orange-400 block w-full text-left"
             >
-              Quotation Tool
+              Quotation Management
             </button>
             <button
               onClick={() => setActiveSection("clients")}
